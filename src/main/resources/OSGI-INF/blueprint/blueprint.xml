@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint default-activation="eager"
+    xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+    http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+    
+    <!-- OSGI blueprint property placeholder -->
+    <cm:property-placeholder id="props" persistent-id="datasource.manager" />
+    
+	<service interface="javax.sql.DataSource" ref="equationDS">
+        <service-properties>
+            <entry key="osgi.jndi.service.name" value="/jdbc/equationDS"/>
+        </service-properties>
+    </service>
+    
+    <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="equationDS">
+        <property name="driverClassName" value="com.ibm.as400.access.AS400JDBCDriver"/>
+        <property name="url" value="${equation.db.url}"/>
+        <property name="initialSize" value="${equation.db.initialSize}"/>
+        <property name="maxActive" value="${equation.db.maxActive}"/>
+        <property name="maxWait" value="${equation.db.maxWait}"/>
+        <property name="maxIdle" value="${equation.db.maxIdle}"/>
+        <property name="validationQuery" value="${equation.db.validationQuery}"/>
+    </bean>
+    
+</blueprint>
